@@ -1,7 +1,7 @@
 <?php
 /*
 
-easyraiblocksPHP
+easyraiblocksphp
 
 ===================
 
