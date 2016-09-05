@@ -45,7 +45,8 @@ $args = array(
 	"account" => "xrb_3e3j5tkog48pnny9dmfzj1r16pg8t1e76dz5tmac6iq689wyjfpi00000000"
 );
 
-$raiblocks->account_balance( $args );
+$response = $raiblocks->account_balance( $args );
+echo $response['balance'];
 
 // The full response (not usually needed) is stored in $this->response while the raw JSON is stored in $this->raw_response
 
