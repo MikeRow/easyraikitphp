@@ -198,6 +198,6 @@ class RaiBlocks {
             return FALSE;
         }
 
-        return $this->response['result'];
+        return $this->response;
     }
 }
