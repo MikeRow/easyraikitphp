@@ -118,13 +118,13 @@ class RaiBlocks {
             //'id'     => $this->id
         );
 		
-		foreach($params[0] as $key=>$value){
-			
-			$request[$key] = $value;
-			
-		}
+	foreach($params[0] as $key=>$value){
 		
-		$request = json_encode($request);
+		$request[$key] = $value;
+		
+	}
+		
+	$request = json_encode($request);
 
         // Build the cURL session
         $curl    = curl_init("{$this->proto}://{$this->host}:{$this->port}/{$this->url}");
