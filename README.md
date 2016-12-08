@@ -1,5 +1,5 @@
 # easyraikitphp
-PHP scripts for managing your RaiBlocks node
+PHP scripts for RaiBlocks node management
 
 **easyraiblocksphp** | manage node through RPC with PHP
 
