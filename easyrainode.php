@@ -85,7 +85,11 @@
 		
 		echo "\n";
 		
-		print_r( $rb->{$method}($args) );
+		$result = $rb->{$method}($args);
+		
+		if( isset($result["balance"]) ){ $result["balance_rai"] = number_format($result["balance"],24,",",".") }
+		
+		print_r($result);
 		
 	}
 	
