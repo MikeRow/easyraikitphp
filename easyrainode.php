@@ -116,8 +116,8 @@
 		"wch" => array("Wallet change password","password_change",array("Wallet"=>"wallet","Password"=>"password")),
 		"wp" => array("Wallet password enter","password_enter",array("Wallet"=>"wallet","Password"=>"password")),
 		"wv" => array("Wallet valid password","password_valid",array("Wallet"=>"wallet")),
-		"wr" => array("Wallet representative","representative",array("Wallet"=>"wallet")),
-		"wrs" => array("Wallet representative set","representative_set",array("Wallet"=>"wallet","Representative"=>"representative")),
+		"wr" => array("Wallet representative","wallet_representative",array("Wallet"=>"wallet")),
+		"wrs" => array("Wallet representative set","wallet_representative_set",array("Wallet"=>"wallet","Representative"=>"representative")),
 		// Account
 		"sep2" => array("Account","separator"),
 		"ab" => array("Account balance","account_balance",array("Account"=>"account")),
@@ -126,6 +126,7 @@
 		"am" => array("Account move","account_move",array("Wallet destination"=>"wallet","Wallet source"=>"source","Account[]"=>"accounts")),
 		"aw" => array("Account weight","account_weight",array("Account"=>"account")),
 		"av" => array("Validate account number checksum","validate_account_number",array("Account"=>"account")),
+		"ar" => array("Account representative","representative",array("Account"=>"account")),
 		// Generic
 		"sep3" => array("Generic","separator"),
 		"as" => array("Available supply","available_supply",null),
