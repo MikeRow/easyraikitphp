@@ -118,7 +118,7 @@ class RaiBlocks {
             //'id'     => $this->id
         );
 		
-        if( isset($param[0]) ){
+        if( isset($params[0]) ){
         
 		foreach($params[0] as $key=>$value){
 				
