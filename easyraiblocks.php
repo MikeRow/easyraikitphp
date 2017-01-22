@@ -118,11 +118,15 @@ class RaiBlocks {
             //'id'     => $this->id
         );
 		
-	foreach($params[0] as $key=>$value){
+        if( isset($param[0]) ){
+        
+		foreach($params[0] as $key=>$value){
+				
+			$request[$key] = $value;
+				
+		}
 		
-		$request[$key] = $value;
-		
-	}
+        }
 		
 	$request = json_encode($request);
 
