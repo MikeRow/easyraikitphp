@@ -239,7 +239,7 @@
 	function raiblocks_representative_all( $walletID, $representative, $further = true ){
 		
 		global $rb_ext;
-		$rep_change = array( "further" => "no", "status" => "ok", "accounts" => array() );
+		$rep_change = array( "further" => "no", "status" => "ok", "weight_shifted" => 0, "accounts" => array() );
 		
 		if($further){ // If change representative for further accounts
 			
@@ -279,6 +279,7 @@
 			if( $return2["block"] != "0000000000000000000000000000000000000000000000000000000000000000" ){ // If change representative performed correctly
 			
 				$rep_change["accounts"][$account] = $return2["block"];
+				$rep_change["weight_shifted"] += $balance["balance_rai"];
 			
 			}else{
 			
