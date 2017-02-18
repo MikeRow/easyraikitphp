@@ -230,4 +230,67 @@
 		
 	}
 	
+	// Call this function to change the representative for every account that exist in the wallet and for further (if selected)
+	// Parameters:
+	// $walletID -> the ID of the wallet that contains your accounts
+	// $representative -> the representative you want to set
+	// $further -> change the representative of wallet for further accounts (default set to yes)
+	
+	function raiblocks_representative_all( $walletID, $representative, $further = true ){
+		
+		global $rb_ext;
+		$rep_change = array( "further" => "no", "status" => "ok", "accounts" => array() );
+		
+		if($further){ // If change representative for further accounts
+			
+			$args = array(
+			
+				"wallet" => $walletID,
+				"representative" => $representative
+				
+			);
+			
+			$return = $rbc->wallet_representative_set( $args );
+			
+			if( $return["set"] == "1" ){ // If set correctly
+				
+				$rep_change["further"] = "yes";
+			
+			}
+		
+		}
+		
+		$return = raiblocks_balance_wallet($walletID);
+		
+		// Change for each account
+		
+		foreach($return["accounts"] as $account => $balance){
+		
+			$args = array(
+			
+				"wallet" => $walletID,
+				"acccount" => $account,
+				"representative" => $representative
+			
+			);
+		
+			$return2 = $rbc->account_representative_set( $args );
+			
+			if( $return2["block"] != "0000000000000000000000000000000000000000000000000000000000000000" ){ // If change representative performed correctly
+			
+				$rep_change["accounts"][$account] = $return2["block"];
+			
+			}else{
+			
+				$rep_change["accounts"][$account] = "error";
+				$rep_change["status"] = "error";
+				
+			}
+		
+		}
+		
+		return $rep_change;
+		
+	}
+	
 ?>
