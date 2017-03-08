@@ -222,11 +222,11 @@
 			
 			}elseif( $line == "e_sw" ){
 			
-				$result = raiblocks_send_wallet( $args[0], $args[1], $args[2] )
+				$result = raiblocks_send_wallet( $args[0], $args[1], $args[2] );
 			
 			}elseif( $line == "e_ra" ){
 			
-				$result = raiblocks_representative_all( $args[0], $args[1], $args[2] )
+				$result = raiblocks_representative_all( $args[0], $args[1], $args[2] );
 			
 			}else{
 				
