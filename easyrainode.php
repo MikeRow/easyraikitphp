@@ -35,8 +35,10 @@
 	// Include easyraiblocksphp class
 	
 	include("easyraiblocks.php");
+	include("easyraiext.php");
 	
 	$rb = new RaiBlocks(RB_HOST,RB_PORT,RB_URL);
+	$rb_ext = $rb;
 	//$rb->setSSL('/full/path/to/mycertificate.cert'); // Uncomment this if you want to set up a secure SSL connection, you need tool like "stunnel" on the node server
 	
 	// Methods to call
@@ -141,8 +143,14 @@
 		"wca" => array("Work cancel","work_cancel",array("Hash"=>"hash")),
 		"se" => array("Send","send",array("Wallet source"=>"wallet","Account source"=>"source","Account destination"=>"destination","Rai**"=>"amount")),
 		"sn" => array("Stop node","stop",null),
+		// Extension
+		"sep4" => array("Extensions","separator"),
+		"e_bw" => array("Balance wallet","raiblocks_balance_wallet",array("Wallet"=>"wallet")),
+		"e_cw" => array("Clear wallet","raiblocks_clear_wallet",array("Wallet"=>"wallet","Destination"=>"destination")),
+		"e_sw" => array("Send wallet","raiblocks_send_wallet",array("Wallet"=>"wallet","Destination"=>"destination","Rai"=>"amount")),
+		"e_ra" => array("Representative all","raiblocks_representative_all",array("Wallet"=>"wallet","Representative"=>"representative","Further"=>"furhter")),
 		// Quit
-		"sep4" => array("","separator"),
+		"sep5" => array("","separator"),
 		"q" => array("Quit","rb_quit")
 	
 	);
@@ -182,7 +190,53 @@
 			
 			exit;
 			
-		}elseif( array_key_exists($line,$commands) ){ // Right command
+		}elseif( substr( $line, 0, 2 ) == "e_" && array_key_exists($line,$commands) ){ // Extended functions
+			
+			echo "\n";
+			
+			$result = array();
+			
+			$params = $commands[$line][2]; $args = array();
+			
+			if($params != null){
+			
+				echo "\n";
+			
+				foreach( $params as $key=>$param ){
+					
+					echo $key.": ";
+					$line = stream_get_line( STDIN, 1024, PHP_EOL );
+					$args[] = $line;
+					
+				}
+			
+			}
+			
+			if( $line == "e_bw" ){
+			
+				$result = raiblocks_balance_wallet( $args[0] );
+			
+			}elseif( $line == "e_cw" ){
+			
+				$result = raiblocks_clear_wallet( $args[0], $args[1] );
+			
+			}elseif( $line == "e_sw" ){
+			
+				$result = raiblocks_send_wallet( $args[0], $args[1], $args[2] )
+			
+			}elseif( $line == "e_ra" ){
+			
+				$result = raiblocks_representative_all( $args[0], $args[1], $args[2] )
+			
+			}else{
+				
+				// Do nothing.
+			
+			}
+			
+			print_r( $result );
+			
+		}elseif( array_key_exists($line,$commands) ){ // Normal RPC
 			
 			echo "\n";
 			
