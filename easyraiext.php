@@ -33,7 +33,7 @@
 	
 	*/
 	
-	$rb_ext = // Put here your variable name used to call RPC, Example: $raiblocks = new RaiBlocks('host','port');
+	$rb_ext = clone $rb; // Put here your variable name used to call RPC, Example: $rb = new RaiBlocks('host','port');
 	
 	// ************************************************************
 	// DO NOT EDIT BELOW, BUT DO IT IF YOU KNOW WHAT YOU ARE DOING!
@@ -48,13 +48,13 @@
 		global $rb_ext;
 		$accounts_balances = array( "sum_balance" => 0, "sum_pending" => 0, "accounts" => array() );
 		
-		$return = $rb_ext->account_list( args( "wallet" => $walletID ) ); // Get all accounts of a wallet
+		$return = $rb_ext->account_list( array( "wallet" => $walletID ) ); // Get all accounts of a wallet
 		
 		// Fetch every account
 		
 		foreach($return["accounts"] as $account){
 		
-			$return2 = $rb_ext->account_balance( args( "account" => $account ) ); // Get balance of account
+			$return2 = $rb_ext->account_balance( array( "account" => $account ) ); // Get balance of account
 			
 			$accounts_balances["accounts"][$account] = array( // Build the return array
 			

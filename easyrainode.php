@@ -35,11 +35,11 @@
 	// Include easyraiblocksphp class
 	
 	include("easyraiblocks.php");
-	include("easyraiext.php");
 	
 	$rb = new RaiBlocks(RB_HOST,RB_PORT,RB_URL);
-	$rb_ext = $rb;
 	//$rb->setSSL('/full/path/to/mycertificate.cert'); // Uncomment this if you want to set up a secure SSL connection, you need tool like "stunnel" on the node server
+	
+	include("easyraiext.php");
 	
 	// Methods to call
 	
