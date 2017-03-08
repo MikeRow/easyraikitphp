@@ -92,6 +92,7 @@
 		$result = $rb->{$method}($args);
 		
 		if( isset($result["balance"]) ){ $result["balance_rai"] = americanu($result["balance"]/RAIN,24); }
+		if( isset($result["pending"]) ){ $result["panding_rai"] = americanu($result["balance"]/RAIN,24); }
 		if( isset($result["weight"]) ){ $result["weight_rai"] = americanu($result["weight"]/RAIN,24); }
 		if( isset($result["count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
 		
@@ -118,6 +119,8 @@
 		// Account
 		"sep2" => array("Account","separator"),
 		"ab" => array("Account balance","account_balance",array("Account"=>"account")),
+		"ar" => array("Account representative","account_representative",array("Account"=>"account")),
+		"ars" => array("Account representative set","account_representative_set",array("Wallet" => "wallet", "Account"=>"account", "Representative"=>"representative")),
 		"ac" => array("Account create","account_create",array("Wallet"=>"wallet")),
 		"al" => array("Account list","account_list",array("Wallet"=>"wallet")),
 		"am" => array("Account move","account_move",array("Wallet destination"=>"wallet","Wallet source"=>"source","Account[]"=>"accounts")),
@@ -127,10 +130,15 @@
 		"sep3" => array("Generic","separator"),
 		"as" => array("Available supply","available_supply",null),
 		"bc" => array("Block count","block_count",null),
+		"bo" => array("Bootstrap","bootstrap",array("IP"=>"address","Port"=>"port")),
 		"fc" => array("Frontier count","frontier_count",null),
 		"rn" => array("Retrieve node version","version",null),
 		"rp" => array("Retrieve online peers","peers",null),
-		"ka" => array("Keep alive","keepalive",array("Address"=>"address","Port"=>"port")),
+		"ka" => array("Keep alive","keepalive",array("IP"=>"address","Port"=>"port")),
+		"spe" => array("Search pending","search_pending",array("Wallet"=>"wallet")),
+		"pe" => array("Pending","pending",array("Account"=>"account","Count"=>"count")),
+		"wg" => array("Work generate","work_generate",array("Hash"=>"hash")),
+		"wca" => array("Work cancel","work_cancel",array("Hash"=>"hash")),
 		"se" => array("Send","send",array("Wallet source"=>"wallet","Account source"=>"source","Account destination"=>"destination","Rai**"=>"amount")),
 		"sn" => array("Stop node","stop",null),
 		// Quit
