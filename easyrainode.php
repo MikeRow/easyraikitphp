@@ -194,7 +194,7 @@
 			
 			echo "\n";
 			
-			$result = array();
+			$result = array(); $args = array();
 			
 			$params = $commands[$line][2]; $args = array();
 			
@@ -205,8 +205,8 @@
 				foreach( $params as $key=>$param ){
 					
 					echo $key.": ";
-					$line = stream_get_line( STDIN, 1024, PHP_EOL );
-					$args[] = $line;
+					$line2 = stream_get_line( STDIN, 1024, PHP_EOL );
+					$args[] = $line2;
 					
 				}
 			

@@ -33,7 +33,7 @@
 	
 	*/
 	
-	$rb_ext = clone $rb; // Put here your variable name used to call RPC, Example: $rb = new RaiBlocks('host','port');
+	$rb_ext = $rb; // Put here your variable name used to call RPC, Example: $rb = new RaiBlocks('host','port');
 	
 	// ************************************************************
 	// DO NOT EDIT BELOW, BUT DO IT IF YOU KNOW WHAT YOU ARE DOING!
@@ -46,7 +46,7 @@
 	function raiblocks_balance_wallet($walletID){
 	
 		global $rb_ext;
-		$accounts_balances = array( "sum_balance" => 0, "sum_pending" => 0, "accounts" => array() );
+		$accounts_balances = array( "sum_balance_rai" => 0, "sum_pending_rai" => 0, "accounts" => array() );
 		
 		$return = $rb_ext->account_list( array( "wallet" => $walletID ) ); // Get all accounts of a wallet
 		
@@ -106,7 +106,7 @@
 					$payment_hashes["accounts"][$account] = array(
 					
 						"hash" => $return2["block"],
-						"amount" => $balance["balance_rai"]
+						"amount_rai" => $balance["balance_rai"]
 					
 					);
 					
@@ -117,7 +117,7 @@
 					$payment_hashes["accounts"][$account] = array(
 					
 						"hash" => "error",
-						"amount" => $balance["balance_rai"]
+						"amount_rai" => $balance["balance_rai"]
 					
 					);
 				
@@ -203,7 +203,7 @@
 				$payment_hashes["accounts"][$selected_account] = array(
 				
 					"hash" => $return2["block"],
-					"amount" => $balance
+					"amount_rai" => $balance
 				
 				);
 				
@@ -216,7 +216,7 @@
 				$payment_hashes["accounts"][$selected_account] = array(
 				
 					"hash" => "error",
-					"amount" => $balance
+					"amount_rai" => $balance
 				
 				);
 				
@@ -239,7 +239,7 @@
 	function raiblocks_representative_all( $walletID, $representative, $further = true ){
 		
 		global $rb_ext;
-		$rep_change = array( "further" => "no", "status" => "ok", "weight_shifted" => 0, "accounts" => array() );
+		$rep_change = array( "further" => "no", "status" => "ok", "weight_shifted_rai" => 0, "accounts" => array() );
 		
 		if($further){ // If change representative for further accounts
 			
@@ -279,7 +279,7 @@
 			if( $return2["block"] != "0000000000000000000000000000000000000000000000000000000000000000" ){ // If change representative performed correctly
 			
 				$rep_change["accounts"][$account] = $return2["block"];
-				$rep_change["weight_shifted"] += $balance["balance_rai"];
+				$rep_change["weight_shifted_rai"] += $balance["balance_rai"];
 			
 			}else{
 			
