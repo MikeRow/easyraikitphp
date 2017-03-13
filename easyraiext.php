@@ -28,12 +28,11 @@
 
 	/*
 	
-	To use this extension add after include_once('PATH/easyraiblocks.php');
-	This: include_once('PATH/easyraiext.php');
+	To use this extension add after include_once('PATH/easyraiblocks.php'); -> include_once('PATH/easyraiext.php');
+	
+	Then add --> $rb_ext = $rb; // Put here your variable name used to call RPC, Example: $rb = new RaiBlocks('host','port');
 	
 	*/
-	
-	$rb_ext = $rb; // Put here your variable name used to call RPC, Example: $rb = new RaiBlocks('host','port');
 	
 	// ************************************************************
 	// DO NOT EDIT BELOW, BUT DO IT IF YOU KNOW WHAT YOU ARE DOING!
