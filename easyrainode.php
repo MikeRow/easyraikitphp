@@ -24,6 +24,8 @@
 	// CONFIGURATION, EDIT WITH YOUR PARAMETERS
 	// ****************************************
 
+	// To perform a correct update function, this script have to been in the same folder of rai_node
+	
 	DEFINE("RB_HOST","127.0.0.1"); // RaiBlocks node host
 	DEFINE("RB_PORT","7076"); // RaiBlocks node port
 	DEFINE("RB_URL",null); // I don't know what this is for, just leave null
@@ -146,10 +148,10 @@
 		"sn" => array("Stop node","stop",null),
 		// Extension
 		"sep4" => array("Extensions","separator"),
-		"e_bw" => array("Balance wallet","raiblocks_balance_wallet",array("Wallet"=>"wallet")),
+		"e_bw" => array("Wallet balance","raiblocks_balance_wallet",array("Wallet"=>"wallet")),
 		"e_cw" => array("Clear wallet","raiblocks_clear_wallet",array("Wallet"=>"wallet","Destination"=>"destination")),
-		"e_sw" => array("Send wallet","raiblocks_send_wallet",array("Wallet"=>"wallet","Destination"=>"destination","Rai"=>"amount")),
-		"e_ra" => array("Representative all","raiblocks_representative_all",array("Wallet"=>"wallet","Representative"=>"representative","Further"=>"furhter")),
+		"e_sw" => array("Send from wallet","raiblocks_send_wallet",array("Wallet"=>"wallet","Destination"=>"destination","Rai"=>"amount")),
+		"e_ra" => array("Set representative for all","raiblocks_representative_all",array("Wallet"=>"wallet","Representative"=>"representative","Further"=>"furhter")),
 		// Quit
 		"sep5" => array("","separator"),
 		"q" => array("Quit","rb_quit")
@@ -174,6 +176,22 @@
 		}
 		
 	}
+	
+	// Installed version
+	$cversion = $rb->version();
+	$cversion = $cversion["node_vendor"];
+	$cversion = str_replace("RaiBlocks ","",$cversion);
+	
+	// Latest version
+	$url = "https://raiblockscommunity.net/get/latest.php";
+	$json = file_get_contents($url);
+	$json_data = json_decode($json, true);
+	$lversion = $json_data["node"];
+	
+	if( $lversion == $cversion ){ echo "\n\tRunning latest version: ".$cversion; }
+	else{ echo "\n\tNEW VERSION AVAILABLE: ".$lversion; }
+	
+	echo "\n";
 	
 	while( true ){
 	
