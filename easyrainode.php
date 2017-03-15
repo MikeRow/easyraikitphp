@@ -23,8 +23,6 @@
 	// ****************************************
 	// CONFIGURATION, EDIT WITH YOUR PARAMETERS
 	// ****************************************
-
-	// To perform a correct update function, this script have to been in the same folder of rai_node
 	
 	DEFINE("RB_HOST","127.0.0.1"); // RaiBlocks node host
 	DEFINE("RB_PORT","7076"); // RaiBlocks node port
@@ -152,6 +150,7 @@
 		"e_cw" => array("Clear wallet","raiblocks_clear_wallet",array("Wallet"=>"wallet","Destination"=>"destination")),
 		"e_sw" => array("Send from wallet","raiblocks_send_wallet",array("Wallet"=>"wallet","Destination"=>"destination","Rai"=>"amount")),
 		"e_ra" => array("Set representative for all","raiblocks_representative_all",array("Wallet"=>"wallet","Representative"=>"representative","Further"=>"furhter")),
+		"e_na" => array("Create n accounts","raiblocks_n_accounts",array("Wallet"=>"wallet","N accounts"=>"n")),
 		// Quit
 		"sep5" => array("","separator"),
 		"q" => array("Quit","rb_quit")
@@ -246,6 +245,10 @@
 			}elseif( $line == "e_ra" ){
 			
 				$result = raiblocks_representative_all( $args[0], $args[1], $args[2] );
+			
+			}elseif( $line == "e_na" ){
+			
+				$result = raiblocks_n_accounts( $args[0], $args[1] );
 			
 			}else{
 				

@@ -45,7 +45,7 @@
 	function raiblocks_balance_wallet($walletID){
 	
 		global $rb_ext;
-		$accounts_balances = array( "sum_balance_rai" => 0, "sum_pending_rai" => 0, "accounts" => array() );
+		$accounts_balances = array( "sum_balance_rai" => 0, "sum_pending_rai" => 0, "n_accounts" => 0, "accounts" => array() );
 		
 		$return = $rb_ext->account_list( array( "wallet" => $walletID ) ); // Get all accounts of a wallet
 		
@@ -64,6 +64,7 @@
 			
 			$accounts_balances["sum_balance_rai"] += $accounts_balances["accounts"][$account]["balance_rai"];
 			$accounts_balances["sum_pending_rai"] += $accounts_balances["accounts"][$account]["pending_rai"];
+			$accounts_balances["n_accounts"]++;
 		
 		}
 		
@@ -291,6 +292,33 @@
 		
 		return $rep_change;
 		
+	}
+	
+	// Call this function to generate n accounts in a wallet
+	// Parameters:
+	// $walletID -> the ID of the wallet that generates accounts
+	// $n -> the number of account you wish to generate
+	
+	function raiblocks_n_accounts($walletID,$n){
+	
+		global $rb_ext;
+		$accounts_created = array( "n" => $n, "n_generated" => 0, "accounts" => array() );
+		
+		$i = 0;
+		
+		while( $i < $n ){
+			
+			$return = $rb_ext->account_create( array( "wallet" => $walletID ) ); // Create a new account
+			
+			if( $return["account"] != "" ){ $accounts_created["n_generated"]++; $accounts_created["accounts"][] = $return["account"]; }
+			else{  }
+			
+			$i++;
+		
+		}
+		
+		return $accounts_created;
+	
 	}
 	
 ?>
