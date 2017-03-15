@@ -101,6 +101,12 @@
 		
 		print_r($result);
 		
+		// BACKUP LATEST OUTPUT
+		
+		$fp = fopen( "latest-output.json", "w" );
+		fwrite($fp, json_encode($result));
+		fclose($fp);
+		
 	}
 	
 	// List of commands
@@ -257,6 +263,12 @@
 			}
 			
 			print_r( $result );
+			
+			// BACKUP LATEST OUTPUT
+			
+			$fp = fopen( "latest-output.json", "w" );
+			fwrite($fp, json_encode($result));
+			fclose($fp);
 			
 		}elseif( array_key_exists($line,$commands) ){ // Normal RPC
 			
