@@ -94,8 +94,8 @@
 		
 		// BACKUP LATEST OUTPUT
 		
-		$fp = fopen( "latest-output.json", "w" );
-		fwrite($fp, json_encode($result));
+		$fp = fopen( "latest-output.json", "a" );
+		fwrite($fp, "\n\n".json_encode($result));
 		fclose($fp);
 		
 	}
@@ -260,8 +260,8 @@
 			
 			// BACKUP LATEST OUTPUT
 			
-			$fp = fopen( "latest-output.json", "w" );
-			fwrite($fp, json_encode($result));
+			$fp = fopen( "latest-output.json", "a" );
+			fwrite($fp, "\n\n".json_encode($result));
 			fclose($fp);
 			
 		}elseif( array_key_exists($line,$commands) ){ // Normal RPC
