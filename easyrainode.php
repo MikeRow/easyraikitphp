@@ -20,27 +20,15 @@
 
 	*/
 
-	// ****************************************
-	// CONFIGURATION, EDIT WITH YOUR PARAMETERS
-	// ****************************************
-	
-	DEFINE("RB_HOST","127.0.0.1"); // RaiBlocks node host
-	DEFINE("RB_PORT","7076"); // RaiBlocks node port
-	DEFINE("RB_URL",null); // I don't know what this is for, just leave null
-
 	// ************************************************************
 	// DO NOT EDIT BELOW, BUT DO IT IF YOU KNOW WHAT YOU ARE DOING!
 	// ************************************************************
 	
-	// Include easyraiblocksphp class
+	// Includes
 	
-	include("easyraiblocks.php");
-	include("easyraiext.php");
-	
-	$rb = new RaiBlocks(RB_HOST,RB_PORT,RB_URL);
-	//$rb->setSSL('/full/path/to/mycertificate.cert'); // Uncomment this if you want to set up a secure SSL connection, you need tool like "stunnel" on the node server
-	$rb_ext = $rb;
-	
+	include("easyraiblocks.php"); // Include RPC class
+	include("easyraiext.php"); // Include extension class
+	include("easyrainode_config.php"); // Include configuration file
 	
 	// Methods to call
 	
@@ -64,14 +52,14 @@
 		
 			foreach( $params as $key=>$param ){
 				
-				if(substr( $key, -2, 2 ) == "[]"){
+				if(substr( $key, -2, 2 ) == "[]"){ // If asked for array, ask only for first element.
 					
 					echo substr( $key, 0, -2 ).": ";
 					$line = stream_get_line( STDIN, 1024, PHP_EOL );
 					
 					$args[$param] = array($line);
 					
-				}elseif(substr( $key, -2, 2 ) == "**"){
+				}elseif(substr( $key, -2, 2 ) == "**"){ // If it's an amount, elaborate it as rai.
 					
 					echo substr( $key, 0, -2 ).": ";
 					$line = stream_get_line( STDIN, 1024, PHP_EOL );
@@ -82,6 +70,9 @@
 				
 					echo $key.": ";
 					$line = stream_get_line( STDIN, 1024, PHP_EOL );
+					
+					if($param == "wallet" && $line == "WALLET"){ $line = ERN_WALLET; }
+					
 					$args[$param] = $line;
 				
 				}
@@ -230,6 +221,9 @@
 					
 					echo $key.": ";
 					$line2 = stream_get_line( STDIN, 1024, PHP_EOL );
+					
+					if($param == "wallet" && $line2 == "WALLET"){ $line2 = ERN_WALLET; }
+					
 					$args[] = $line2;
 					
 				}

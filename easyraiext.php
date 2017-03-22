@@ -45,7 +45,7 @@
 	function raiblocks_balance_wallet($walletID){
 	
 		global $rb_ext;
-		$accounts_balances = array( "sum_balance_rai" => 0, "sum_pending_rai" => 0, "n_accounts" => 0, "accounts" => array() );
+		$accounts_balances = array( "accounts" => array(), "sum_balance_rai" => 0, "sum_pending_rai" => 0, "n_accounts" => 0 );
 		
 		$return = $rb_ext->account_list( array( "wallet" => $walletID ) ); // Get all accounts of a wallet
 		
@@ -80,7 +80,7 @@
 	function raiblocks_clear_wallet( $walletID, $destination ){
 	
 		global $rb_ext;
-		$payment_hashes = array( "sum_balance_rai" => 0, "sum_paid_rai" => 0, "accounts" => array() );
+		$payment_hashes = array( "accounts" => array(), "sum_balance_rai" => 0, "sum_paid_rai" => 0 );
 		
 		$return = raiblocks_balance_wallet($walletID);
 		
@@ -140,7 +140,7 @@
 	function raiblocks_send_wallet( $walletID, $destination, $amount ){
 	
 		global $rb_ext;
-		$payment_hashes = array( "status" => "ok", "sum_paid_rai" => 0, "accounts" => array() ); $selected_accounts = array(); $sum = 0; $diff_amount = $amount;
+		$payment_hashes = array( "accounts" => array(), "status" => "ok", "sum_paid_rai" => 0 ); $selected_accounts = array(); $sum = 0; $diff_amount = $amount;
 		
 		$return = raiblocks_balance_wallet($walletID);
 		
@@ -239,7 +239,7 @@
 	function raiblocks_representative_all( $walletID, $representative, $further = true ){
 		
 		global $rb_ext;
-		$rep_change = array( "further" => "no", "status" => "ok", "weight_shifted_rai" => 0, "accounts" => array() );
+		$rep_change = array( "accounts" => array(), "further" => "no", "status" => "ok", "weight_shifted_rai" => 0 );
 		
 		if($further){ // If change representative for further accounts
 			
@@ -302,7 +302,7 @@
 	function raiblocks_n_accounts($walletID,$n){
 	
 		global $rb_ext;
-		$accounts_created = array( "n" => $n, "n_generated" => 0, "accounts" => array() );
+		$accounts_created = array( "accounts" => array(), "n" => $n, "n_generated" => 0 );
 		
 		$i = 0;
 		
