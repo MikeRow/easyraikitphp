@@ -329,7 +329,7 @@
 	
 		global $rb_ext;
 		
-		$i = 0;
+		$i = 0; $a = 0;
 		$found = array();
 		do{
 			
@@ -338,14 +338,17 @@
 			
 			if( strpos( $account, 'xrb_'.$string ) === 0 || strpos( $account, 'xrb_1'.$string ) === 0 || strpos( $account, 'xrb_3'.$string ) === 0 ){
 				
-				$found = $key_create;
 				$i = 1;
 				
 			}
 			
+			$a++;
+			
 		}while( $i < 1 )
 
-		return $found;
+		$key_create["attempts"] = $a;
+			
+		return $key_create;
 	
 	}
 	
