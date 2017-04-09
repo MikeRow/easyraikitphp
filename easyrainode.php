@@ -122,6 +122,8 @@
 		"ar" => array("Account representative","account_representative",array("Account"=>"account")),
 		"ars" => array("Account representative set","account_representative_set",array("Wallet" => "wallet", "Account"=>"account", "Representative"=>"representative")),
 		"ac" => array("Account create","account_create",array("Wallet"=>"wallet")),
+		"ag" => array("Account get","account_get",array("Public key"=>"key")),
+		"apk" => array("Account public key","account_key",array("Account"=>"account")),
 		"al" => array("Account list","account_list",array("Wallet"=>"wallet")),
 		"am" => array("Account move","account_move",array("Wallet destination"=>"wallet","Wallet source"=>"source","Account[]"=>"accounts")),
 		"aw" => array("Account weight","account_weight",array("Account"=>"account")),
@@ -140,6 +142,8 @@
 		"wg" => array("Work generate","work_generate",array("Hash"=>"hash")),
 		"wca" => array("Work cancel","work_cancel",array("Hash"=>"hash")),
 		"se" => array("Send","send",array("Wallet source"=>"wallet","Account source"=>"source","Account destination"=>"destination","Rai**"=>"amount")),
+		"ke" => array("Key expand","key_expand",array("Private key"=>"key")),
+		"kc" => array("Key create","key_create",null),
 		"sn" => array("Stop node","stop",null),
 		// Extension
 		"sep4" => array("Extensions","separator"),
@@ -148,6 +152,7 @@
 		"e_sw" => array("Send from wallet","raiblocks_send_wallet",array("Wallet"=>"wallet","Destination"=>"destination","Rai"=>"amount")),
 		"e_ra" => array("Set representative for all","raiblocks_representative_all",array("Wallet"=>"wallet","Representative"=>"representative","Further"=>"furhter")),
 		"e_na" => array("Create n accounts","raiblocks_n_accounts",array("Wallet"=>"wallet","N accounts"=>"n")),
+		"e_ga" => array("Generate ad hoc account","raiblocks_adhoc_account",array("Start string"=>"string")),
 		// Quit
 		"sep5" => array("","separator"),
 		"q" => array("Quit","rb_quit")

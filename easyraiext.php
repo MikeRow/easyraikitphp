@@ -297,9 +297,9 @@
 	// Call this function to generate n accounts in a wallet
 	// Parameters:
 	// $walletID -> the ID of the wallet that generates accounts
-	// $n -> the number of account you wish to generate
+	// $n -> the number of accounts you wish to generate
 	
-	function raiblocks_n_accounts($walletID,$n){
+	function raiblocks_n_accounts( $walletID, $n ){
 	
 		global $rb_ext;
 		$accounts_created = array( "accounts" => array(), "n" => $n, "n_generated" => 0 );
@@ -318,6 +318,34 @@
 		}
 		
 		return $accounts_created;
+	
+	}
+	
+	// Call this function to generate an account starting with a particular string
+	// Parameters:
+	// $string -> the string you wish your account starts with
+	
+	function raiblocks_adhoc_account( $string ){
+	
+		global $rb_ext;
+		
+		$i = 0;
+		$found = array();
+		do{
+			
+			$key_create = $rb_ext->key_create();
+			$account = $key_create["account"];
+			
+			if( strpos( $account, 'xrb_'.$string ) === 0 || strpos( $account, 'xrb_1'.$string ) === 0 || strpos( $account, 'xrb_3'.$string ) === 0 ){
+				
+				$found = $key_create;
+				$i = 1;
+				
+			}
+			
+		}while( $i < 1 )
+
+		return $found;
 	
 	}
 	
