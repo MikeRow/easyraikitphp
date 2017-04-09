@@ -261,6 +261,8 @@
 			
 			}
 			
+			if( isset($result["count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
+			
 			print_r( $result );
 			
 			// BACKUP LATEST OUTPUT

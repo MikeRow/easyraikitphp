@@ -346,7 +346,7 @@
 			
 		}while( $i < 1 )
 
-		$key_create["attempts"] = $a;
+		$key_create["count"] = $a;
 			
 		return $key_create;
 	
