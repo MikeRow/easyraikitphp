@@ -255,6 +255,10 @@
 			
 				$result = raiblocks_n_accounts( $args[0], $args[1] );
 			
+			}elseif( $line == "e_ga" ){
+			
+				$result = raiblocks_adhoc_account( $args[0] );
+			
 			}else{
 				
 				// Do nothing.
