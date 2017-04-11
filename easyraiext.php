@@ -330,7 +330,7 @@
 		global $rb_ext;
 		
 		$i = 0; $a = 0;
-		$found = array();
+
 		do{
 			
 			$key_create = $rb_ext->key_create();
@@ -344,7 +344,7 @@
 			
 			$a++;
 			
-		}while( $i < 1 )
+		}while( $i < 1 );
 
 		$key_create["count"] = $a;
 			
