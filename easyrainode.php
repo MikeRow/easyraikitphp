@@ -268,6 +268,8 @@
 			}
 			
 			if( isset($result["count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
+			if( isset($result["sum_balance_rai"]) ){ $result["readable_sum_balance_rai"] = americanu($result["sum_balance_rai"],0); }
+			if( isset($result["sum_pending_rai"]) ){ $result["readable_sum_pending_rai"] = americanu($result["sum_pending_rai"],0); }
 			
 			print_r( $result );
 			
