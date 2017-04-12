@@ -89,6 +89,7 @@
 		if( isset($result["pending"]) ){ $result["panding_rai"] = americanu($result["balance"]/RAIN,24); }
 		if( isset($result["weight"]) ){ $result["weight_rai"] = americanu($result["weight"]/RAIN,24); }
 		if( isset($result["count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
+		if( isset($result["block_count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
 		
 		print_r($result);
 		
@@ -119,6 +120,7 @@
 		// Account
 		"sep2" => array("Account","separator"),
 		"ab" => array("Account balance","account_balance",array("Account"=>"account")),
+		"abc" => array("Account block count","account_block_count",array("Account"=>"account")),
 		"ar" => array("Account representative","account_representative",array("Account"=>"account")),
 		"ars" => array("Account representative set","account_representative_set",array("Wallet" => "wallet", "Account"=>"account", "Representative"=>"representative")),
 		"ac" => array("Account create","account_create",array("Wallet"=>"wallet")),
