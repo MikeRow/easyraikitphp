@@ -71,7 +71,7 @@
 					echo $key.": ";
 					$line = stream_get_line( STDIN, 1024, PHP_EOL );
 					
-					if($param == "wallet" && $line == "WALLET"){ $line = ERN_WALLET; }
+					if($param == "wallet" && $line == ""){ $line = ERN_WALLET; }
 					
 					$args[$param] = $line;
 				
@@ -229,7 +229,7 @@
 					echo $key.": ";
 					$line2 = stream_get_line( STDIN, 1024, PHP_EOL );
 					
-					if($param == "wallet" && $line2 == "WALLET"){ $line2 = ERN_WALLET; }
+					if($param == "wallet" && $line2 == ""){ $line2 = ERN_WALLET; }
 					
 					$args[] = $line2;
 					
@@ -292,4 +292,5 @@
 		}
 	
 	}
+	
 ?>

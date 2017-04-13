@@ -12,7 +12,7 @@
 	
 	// Other parameters
 	
-	DEFINE("ERN_WALLET",""); // Default wallet, type "WALLET" to use this value when CLI ask to you
+	DEFINE("ERN_WALLET",""); // Default wallet, type "" to use this value when CLI ask to you
 	
 	// Connection to node
 	
