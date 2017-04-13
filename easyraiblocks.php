@@ -67,7 +67,8 @@
 	DEFINE("RAI", "000000000000000000000000"); // A string to concatenate to build 1Rai value
 	DEFINE("RAIN", "1000000000000000000000000"); // A value to build 1Rai value
 
-	class RaiBlocks {
+	class RaiBlocks{
+		
 		// Configuration options
 		private $proto;
 		private $host;
@@ -89,24 +90,29 @@
 		 * @param string $proto
 		 * @param string $url
 		 */
-		function __construct( $host = 'localhost', $port = 7076, $url = null ) {
+		function __construct( $host = 'localhost', $port = 7076, $url = null ){
+			
 			$this->host          = $host;
 			$this->port          = $port;
 			$this->url           = $url;
 			// Set some defaults
 			$this->proto         = 'http';
 			$this->CACertificate = null;
+			
 		}
 
 		/**
 		 * @param string|null $certificate
 		 */
-		function setSSL($certificate = null) {
+		function setSSL( $certificate = null ){
+			
 			$this->proto         = 'https'; // force HTTPS
 			$this->CACertificate = $certificate;
+			
 		}
 
-		function __call($method, $params) {
+		function __call( $method, $params ){
+			
 			$this->status       = null;
 			$this->error        = null;
 			$this->raw_response = null;
@@ -125,9 +131,9 @@
 				//'id'     => $this->id
 			);
 			
-			if( isset($params[0]) ){
+			if( isset( $params[0] ) ){
 			
-			foreach($params[0] as $key=>$value){
+			foreach( $params[0] as $key=>$value ){
 					
 				$request[$key] = $value;
 					
@@ -138,8 +144,9 @@
 		$request = json_encode($request);
 
 			// Build the cURL session
-			$curl    = curl_init("{$this->proto}://{$this->host}:{$this->port}/{$this->url}");
+			$curl = curl_init("{$this->proto}://{$this->host}:{$this->port}/{$this->url}");
 			$options = array(
+			
 				CURLOPT_RETURNTRANSFER => TRUE,
 				CURLOPT_FOLLOWLOCATION => TRUE,
 				CURLOPT_USERAGENT	   => "PHP",
@@ -147,47 +154,59 @@
 				CURLOPT_HTTPHEADER     => array('Content-type: application/json'),
 				CURLOPT_POST           => TRUE,
 				CURLOPT_POSTFIELDS     => $request
+				
 			);
 
 			// This prevents users from getting the following warning when open_basedir is set:
 			// Warning: curl_setopt() [function.curl-setopt]: CURLOPT_FOLLOWLOCATION cannot be activated when in safe_mode or an open_basedir is set
-			if (ini_get('open_basedir')) {
+			if( ini_get( 'open_basedir' ) ){
+				
 				unset($options[CURLOPT_FOLLOWLOCATION]);
+				
 			}
 
-			if ($this->proto == 'https') {
+			if( $this->proto == 'https' ){
+				
 				// If the CA Certificate was specified we change CURL to look for it
-				if ($this->CACertificate != null) {
+				if( $this->CACertificate != null ){
+					
 					$options[CURLOPT_CAINFO] = $this->CACertificate;
 					$options[CURLOPT_CAPATH] = DIRNAME($this->CACertificate);
-				}
-				else {
+					
+				}else{
+					
 					// If not we need to assume the SSL cannot be verified so we set this flag to FALSE to allow the connection
 					$options[CURLOPT_SSL_VERIFYPEER] = FALSE;
+					
 				}
+				
 			}
 
-			curl_setopt_array($curl, $options);
+			curl_setopt_array( $curl, $options );
 
 			// Execute the request and decode to an array
-			$this->raw_response = curl_exec($curl);
-			$this->response     = json_decode($this->raw_response, TRUE);
+			$this->raw_response = curl_exec( $curl );
+			$this->response     = json_decode( $this->raw_response, TRUE );
 
 			// If the status is not 200, something is wrong
-			$this->status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+			$this->status = curl_getinfo( $curl, CURLINFO_HTTP_CODE );
 			
 			// If there was no error, this will be an empty string
-			$curl_error = curl_error($curl);
+			$curl_error = curl_error( $curl );
 
-			curl_close($curl);
+			curl_close( $curl );
 
-			if (!empty($curl_error)) {
+			if( !empty( $curl_error ) ){
+				
 				$this->error = $curl_error;
+				
 			}
 
-			if ($this->status != 200) {
+			if( $this->status != 200 ){
+				
 				// If node didn't return a nice error message, we need to make our own
-				switch ($this->status) {
+				switch( $this->status ){
+					
 					case 400:
 						$this->error = 'HTTP_BAD_REQUEST';
 						break;
@@ -200,15 +219,21 @@
 					case 404:
 						$this->error = 'HTTP_NOT_FOUND';
 						break;
+						
 				}
+				
 			}
 
-			if ($this->error) {
+			if( $this->error ){
+				
 				return FALSE;
+				
 			}
 
 			return $this->response;
+			
 		}
+		
 	}
 
 ?>
