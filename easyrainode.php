@@ -117,6 +117,8 @@
 		"wv" => array("Wallet valid password","password_valid",array("Wallet"=>"wallet")),
 		"wr" => array("Wallet representative","representative",array("Wallet"=>"wallet")),
 		"wrs" => array("Wallet representative set","representative_set",array("Wallet"=>"wallet","Representative"=>"representative")),
+		"wf" => array("Wallet frontiers","wallet_frontiers",array("Wallet"=>"wallet")),
+		"wcs" => array("Wallet change seed","wallet_change_seed",array("Wallet"=>"wallet","Seed"=>"seed")),
 		// Account
 		"sep2" => array("Account","separator"),
 		"ab" => array("Account balance","account_balance",array("Account"=>"account")),
@@ -129,6 +131,7 @@
 		"al" => array("Account list","account_list",array("Wallet"=>"wallet")),
 		"am" => array("Account move","account_move",array("Wallet destination"=>"wallet","Wallet source"=>"source","Account[]"=>"accounts")),
 		"aw" => array("Account weight","account_weight",array("Account"=>"account")),
+		"are" => array("Account remove","account_remove",array("Wallet"=>"wallet","Account"=>"account")),
 		"av" => array("Validate account number checksum","validate_account_number",array("Account"=>"account")),
 		// Generic
 		"sep3" => array("Generic","separator"),
@@ -146,6 +149,7 @@
 		"se" => array("Send","send",array("Wallet source"=>"wallet","Account source"=>"source","Account destination"=>"destination","Rai**"=>"amount")),
 		"ke" => array("Key expand","key_expand",array("Private key"=>"key")),
 		"kc" => array("Key create","key_create",null),
+		"re" => array("Representatives","representatives",null),
 		"sn" => array("Stop node","stop",null),
 		// Extension
 		"sep4" => array("Extensions","separator"),
