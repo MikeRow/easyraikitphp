@@ -36,7 +36,7 @@
 	// DO NOT EDIT BELOW, BUT DO IT IF YOU KNOW WHAT YOU ARE DOING!
 	// ************************************************************
 	
-// Call this function to validate RaiBlocks account
+	// Call this function to validate RaiBlocks account
 +	// Requirements: PHP BLAKE2 Extension installed and enabled
 +	// https://github.com/strawbrary/php-blake2
 +	// Parameters:
