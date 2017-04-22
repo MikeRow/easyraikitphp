@@ -4,7 +4,7 @@
 
 	easyraialonephp
 
-	Allows you to perform some operation without relying on a node
+	Allows you to perform some operations without relying on a node
 	
 	====================
 
