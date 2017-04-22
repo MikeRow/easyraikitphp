@@ -1,8 +1,11 @@
 # easyraikitphp
-PHP scripts for RaiBlocks node management
+PHP library for RaiBlocks node and operations
 
-**easyraiblocksphp** | manage node with RPC
+**easyraiblocks.php** | manage node with RPC
 
-**easyraiextphp** | advanced functions not present in RPC
+**easyraiext.php** | advanced functions not present in RPC
 
-**easyrainodephp** | manage node with CLI
+**easyrainode.php** | manage node with CLI
+**easyrainode_config.php** | configuration file for easyrainode.php
+
+**easyraialone.php** | perform RaiBlocks operations without relying on a node
