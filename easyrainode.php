@@ -40,7 +40,7 @@
 	
 	function rb_call_method($method,$params = null){
 		
-		global $rb;
+		global $rb; global $dwallets;
 		
 		$args = array();
 		
@@ -64,14 +64,43 @@
 					echo substr( $key, 0, -2 ).": ";
 					$line = stream_get_line( STDIN, 1024, PHP_EOL );
 					
-					$args[$param] = $line.RAI;
+					$args[$param] = ($line*1000000).RAI;
 				
 				}else{
 				
+					if( $param == "wallet" ){
+						
+						if (count($dwallets) > 0) {
+							
+							echo "Preconfigured wallets:\n\n";
+							
+							foreach ($dwallets as $tag=>$wid) {
+							
+								echo $tag." => ".$wid."\n";
+				
+							}
+							
+							echo "\n";
+						
+						}
+					
+					}
+				
 					echo $key.": ";
+					
 					$line = stream_get_line( STDIN, 1024, PHP_EOL );
 					
-					if($param == "wallet" && $line == ""){ $line = ERN_WALLET; }
+					if ($param == "wallet") { 
+					
+						if (array_key_exists($line,$dwallets)) {
+					
+							$line = $dwallets[$line];
+						
+						}
+							
+						$lastwallet = $line;
+						
+					}
 					
 					$args[$param] = $line;
 				
@@ -85,10 +114,13 @@
 		
 		$result = $rb->{$method}($args);
 		
-		if( isset($result["balance"]) ){ $result["balance_rai"] = americanu($result["balance"]/RAIN,24); }
-		if( isset($result["pending"]) ){ $result["panding_rai"] = americanu($result["balance"]/RAIN,24); }
-		if( isset($result["weight"]) ){ $result["weight_rai"] = americanu($result["weight"]/RAIN,24); }
+		if( isset($result["balance"]) ){ $result["balance_XRB"] = americanu($result["balance"]/RAIN/1000000,30); }
+		if( isset($result["pending"]) ){ $result["pending_XRB"] = americanu($result["pending"]/RAIN/1000000,30); }
+		if( isset($result["amount"]) ){ $result["amount_XRB"] = americanu($result["amount"]/RAIN/1000000,30); }
+		if( isset($result["weight"]) ){ $result["weight_XRB"] = americanu($result["weight"]/RAIN/1000000,30); }
 		if( isset($result["count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
+		if( isset($result["unchecked"]) ){ $result["unchecked_readable"] = americanu($result["unchecked"],0); }
+		if( isset($result["gap"]) ){ $result["gap_readable"] = americanu($result["gap"],0); }
 		if( isset($result["block_count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
 		
 		print_r($result);
@@ -115,14 +147,17 @@
 		"wch" => array("Wallet change password","password_change",array("Wallet"=>"wallet","Password"=>"password")),
 		"wp" => array("Wallet password enter","password_enter",array("Wallet"=>"wallet","Password"=>"password")),
 		"wv" => array("Wallet valid password","password_valid",array("Wallet"=>"wallet")),
-		"wr" => array("Wallet representative","representative",array("Wallet"=>"wallet")),
-		"wrs" => array("Wallet representative set","representative_set",array("Wallet"=>"wallet","Representative"=>"representative")),
+		"wr" => array("Wallet representative","wallet_representative",array("Wallet"=>"wallet")),
+		"wrs" => array("Wallet representative set","wallet_representative_set",array("Wallet"=>"wallet","Representative"=>"representative")),
 		"wf" => array("Wallet frontiers","wallet_frontiers",array("Wallet"=>"wallet")),
 		"wcs" => array("Wallet change seed","wallet_change_seed",array("Wallet"=>"wallet","Seed"=>"seed")),
+		"wtb" => array("Wallet total balance","wallet_balance_total",array("Wallet"=>"wallet")),
+		"wab" => array("Wallet accounts balances","wallet_balances",array("Wallet"=>"wallet")),
 		// Account
 		"sep2" => array("Account","separator"),
 		"ab" => array("Account balance","account_balance",array("Account"=>"account")),
 		"abc" => array("Account block count","account_block_count",array("Account"=>"account")),
+		"aci" => array("Account information","account_info",array("Account"=>"account")),
 		"ar" => array("Account representative","account_representative",array("Account"=>"account")),
 		"ars" => array("Account representative set","account_representative_set",array("Wallet" => "wallet", "Account"=>"account", "Representative"=>"representative")),
 		"ac" => array("Account create","account_create",array("Wallet"=>"wallet")),
@@ -133,10 +168,17 @@
 		"aw" => array("Account weight","account_weight",array("Account"=>"account")),
 		"are" => array("Account remove","account_remove",array("Wallet"=>"wallet","Account"=>"account")),
 		"av" => array("Validate account number checksum","validate_account_number",array("Account"=>"account")),
+		"ah" => array("Account history","account_history",array("Account"=>"account","Count"=>"count")),
+		"ar" => array("Account remove","account_remove",array("Wallet"=>"wallet","Account"=>"account")),
 		// Generic
 		"sep3" => array("Generic","separator"),
 		"as" => array("Available supply","available_supply",null),
 		"bc" => array("Block count","block_count",null),
+		"bct" => array("Block count by type","block_count_type",null),
+		"del" => array("Delegators","delegators",array("Account"=>"account")),
+		"dec" => array("Delegators count","delegators_count",array("Account"=>"account")),
+		"rim" => array("Receive minimum","receive_minimum",null),
+		"dec" => array("Receive minimum set","receive_minimum_set",array("XRB**"=>"amount")),
 		"bo" => array("Bootstrap","bootstrap",array("IP"=>"address","Port"=>"port")),
 		"fc" => array("Frontier count","frontier_count",null),
 		"rn" => array("Retrieve node version","version",null),
@@ -146,19 +188,21 @@
 		"pe" => array("Pending","pending",array("Account"=>"account","Count"=>"count")),
 		"wg" => array("Work generate","work_generate",array("Hash"=>"hash")),
 		"wca" => array("Work cancel","work_cancel",array("Hash"=>"hash")),
-		"se" => array("Send","send",array("Wallet source"=>"wallet","Account source"=>"source","Account destination"=>"destination","Rai**"=>"amount")),
+		"se" => array("Send","send",array("Wallet source"=>"wallet","Account source"=>"source","Account destination"=>"destination","XRB**"=>"amount")),
 		"ke" => array("Key expand","key_expand",array("Private key"=>"key")),
 		"kc" => array("Key create","key_create",null),
 		"re" => array("Representatives","representatives",null),
+		"cub" => array("Clear unchecked blocks","unchecked_clear",null),
 		"sn" => array("Stop node","stop",null),
 		// Extension
 		"sep4" => array("Extensions","separator"),
+		"e_bws" => array("Wallets balances","raiblocks_summary_wallets",null),
 		"e_bw" => array("Wallet balance","raiblocks_balance_wallet",array("Wallet"=>"wallet")),
 		"e_cw" => array("Clear wallet","raiblocks_clear_wallet",array("Wallet"=>"wallet","Destination"=>"destination")),
-		"e_sw" => array("Send from wallet","raiblocks_send_wallet",array("Wallet"=>"wallet","Destination"=>"destination","Rai"=>"amount")),
+		"e_sw" => array("Send from wallet","raiblocks_send_wallet",array("Wallet"=>"wallet","Destination"=>"destination","XRB"=>"amount")),
 		"e_ra" => array("Set representative for all","raiblocks_representative_all",array("Wallet"=>"wallet","Representative"=>"representative","Further"=>"furhter")),
 		"e_na" => array("Create n accounts","raiblocks_n_accounts",array("Wallet"=>"wallet","N accounts"=>"n")),
-		"e_ga" => array("Generate ad hoc account","raiblocks_adhoc_account",array("Start string"=>"string")),
+		"e_ga" => array("Generate ad hoc account","raiblocks_adhoc_account",array("String"=>"string","Position (start/end)"=>"string")),
 		// Quit
 		"sep5" => array("","separator"),
 		"q" => array("Quit","rb_quit")
@@ -189,15 +233,8 @@
 	$cversion = $cversion["node_vendor"];
 	$cversion = str_replace("RaiBlocks ","",$cversion);
 	
-	// Latest version
-	$url = "https://raiblockscommunity.net/get/latest.php";
-	$json = file_get_contents($url);
-	$json_data = json_decode($json, true);
-	$lversion = $json_data["node"];
-	
-	if( $lversion == $cversion ){ echo "\n\tRunning latest version: ".$cversion; }
-	else{ echo "\n\tNEW VERSION AVAILABLE: ".$lversion; }
-	
+	echo "\n\tRunning version: ".$cversion;
+
 	echo "\n";
 	
 	while( true ){
@@ -230,10 +267,38 @@
 			
 				foreach( $params as $key=>$param ){
 					
+					if( $param == "wallet" ){
+						
+						if (count($dwallets) > 0) {
+							
+							echo "Preconfigured wallets:\n\n";
+							
+							foreach ($dwallets as $tag=>$wid) {
+							
+								echo $tag." => ".$wid."\n";
+				
+							}
+							
+							echo "\n";
+						
+						}
+					
+					}
+					
 					echo $key.": ";
 					$line2 = stream_get_line( STDIN, 1024, PHP_EOL );
 					
-					if($param == "wallet" && $line2 == ""){ $line2 = ERN_WALLET; }
+					if ($param == "wallet") { 
+					
+						if (array_key_exists($line2,$dwallets)) {
+					
+							$line2 = $dwallets[$line2];
+							
+						}
+							
+						$lastwallet = $line2;
+						
+					}
 					
 					$args[] = $line2;
 					
@@ -241,7 +306,11 @@
 			
 			}
 			
-			if( $line == "e_bw" ){
+			if( $line == "e_bws" ){
+			
+				$result = raiblocks_summary_wallets();
+			
+			}elseif( $line == "e_bw" ){
 			
 				$result = raiblocks_balance_wallet( $args[0] );
 			
@@ -251,11 +320,11 @@
 			
 			}elseif( $line == "e_sw" ){
 			
-				$result = raiblocks_send_wallet( $args[0], $args[1], $args[2] );
+				$result = raiblocks_send_wallet( $args[0], $args[1], ($args[2]*1000000) );
 			
 			}elseif( $line == "e_ra" ){
 			
-				$result = raiblocks_representative_all( $args[0], $args[1], $args[2] );
+				$result = raiblocks_representative_all( $args[0], $args[1], (int) $args[2] );
 			
 			}elseif( $line == "e_na" ){
 			
@@ -263,7 +332,7 @@
 			
 			}elseif( $line == "e_ga" ){
 			
-				$result = raiblocks_adhoc_account( $args[0] );
+				$result = raiblocks_adhoc_account( $args[0], $args[1] );
 			
 			}else{
 				
@@ -272,8 +341,9 @@
 			}
 			
 			if( isset($result["count"]) ){ $result["count_readable"] = americanu($result["count"],0); }
-			if( isset($result["sum_balance_rai"]) ){ $result["readable_sum_balance_rai"] = americanu($result["sum_balance_rai"],0); }
-			if( isset($result["sum_pending_rai"]) ){ $result["readable_sum_pending_rai"] = americanu($result["sum_pending_rai"],0); }
+			if( isset($result["gap"]) ){ $result["gap_readable"] = americanu($result["gap"],0); }
+			if( isset($result["sum_balance_rai"]) ){ $result["readable_sum_balance_XRB"] = americanu($result["sum_balance_rai"]/1000000,6); }
+			if( isset($result["sum_pending_rai"]) ){ $result["readable_sum_pending_XRB"] = americanu($result["sum_pending_rai"]/1000000,6); }
 			
 			print_r( $result );
 			

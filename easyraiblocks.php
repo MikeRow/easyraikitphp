@@ -54,6 +54,10 @@
 
 	// The full response (not usually needed) is stored in $this->response while the raw JSON is stored in $this->raw_response
 
+	// When node fails for any reason, it will return FALSE and put the error message in $this->node_error
+	// Example:
+	echo $raiblocks->node_error;
+	
 	// When a call fails for any reason, it will return FALSE and put the error message in $this->error
 	// Example:
 	echo $raiblocks->error;
@@ -115,6 +119,7 @@
 			
 			$this->status       = null;
 			$this->error        = null;
+			$this->node_error   = null;
 			$this->raw_response = null;
 			$this->response     = null;
 
@@ -122,7 +127,7 @@
 			//$params = array_values($params);
 
 			// The ID should be unique for each call
-			$this->id++;
+			$this->$id++;
 
 			// Build the request, it's ok that params might have any empty array
 			$request = array(
@@ -195,6 +200,12 @@
 			$curl_error = curl_error( $curl );
 
 			curl_close( $curl );
+			
+			if( isset( $this->response["error"] ) ){
+			
+				$this->node_error = $this->response["error"];
+				
+			}
 
 			if( !empty( $curl_error ) ){
 				

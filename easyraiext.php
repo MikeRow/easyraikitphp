@@ -50,26 +50,54 @@
 		$return = $rb_ext->account_list( array( "wallet" => $walletID ) ); // Get all accounts of a wallet
 		
 		// Fetch every account
+				
+		//echo "\nCount".count($return["accounts"])."\n";
+				
+		if (isset($return["accounts"][0])) {
 		
-		foreach($return["accounts"] as $account){
-		
-			$return2 = $rb_ext->account_balance( array( "account" => $account ) ); // Get balance of account
+			foreach($return["accounts"] as $account){
 			
-			$accounts_balances["accounts"][$account] = array( // Build the return array
+				$return2 = $rb_ext->account_balance( array( "account" => $account ) ); // Get balance of account
+				
+				$accounts_balances["accounts"][$account] = array( // Build the return array
+				
+					"balance_rai" => floor( $return2["balance"]/RAIN ),
+					"pending_rai" => floor( $return2["pending"]/RAIN )
+				
+				);
+				
+				$accounts_balances["sum_balance_rai"] += $accounts_balances["accounts"][$account]["balance_rai"];
+				$accounts_balances["sum_pending_rai"] += $accounts_balances["accounts"][$account]["pending_rai"];
+				$accounts_balances["n_accounts"]++;
 			
-				"balance_rai" => floor( $return2["balance"]/RAIN ),
-				"pending_rai" => floor( $return2["pending"]/RAIN )
-			
-			);
-			
-			$accounts_balances["sum_balance_rai"] += $accounts_balances["accounts"][$account]["balance_rai"];
-			$accounts_balances["sum_pending_rai"] += $accounts_balances["accounts"][$account]["pending_rai"];
-			$accounts_balances["n_accounts"]++;
+			}
 		
 		}
 		
 		return $accounts_balances;
 	
+	}
+	
+	// Call this function to get summary balances of all wallets declared in easyrainode_config.php
+	// Parameters: none
+	
+	function raiblocks_summary_wallets() {
+	
+		global $dwallets;
+		$wallets_balances = array( "wallets" => array(), "sum_balance_rai" => 0, "sum_pending_rai" => 0 );
+		
+		foreach ($dwallets as $tag=>$id){
+		
+			$return = raiblocks_balance_wallet($id);
+			$wallets_balances["wallets"][$id] = array( "tag" => $tag, "balance_rai" => $return["sum_balance_rai"], "pending_rai" => $return["sum_pending_rai"] );
+			
+			$wallets_balances["sum_balance_rai"] += $return["sum_balance_rai"];
+			$wallets_balances["sum_pending_rai"] += $return["sum_pending_rai"];
+			
+		}
+		
+		return $wallets_balances;
+		
 	}
 	
 	// Call this function to clear a wallet sending all funds to an account
@@ -234,7 +262,7 @@
 	// Parameters:
 	// $walletID -> the ID of the wallet that contains your accounts
 	// $representative -> the representative you want to set
-	// $further -> change the representative of wallet for further accounts (default set to yes)
+	// $further -> change the representative of wallet for further accounts (default set true)
 	
 	function raiblocks_representative_all( $walletID, $representative, $further = true ){
 		
@@ -250,7 +278,7 @@
 				
 			);
 			
-			$return = $rbc->wallet_representative_set( $args );
+			$return = $rb_ext->wallet_representative_set( $args );
 			
 			if( $return["set"] == "1" ){ // If set correctly
 				
@@ -269,12 +297,12 @@
 			$args = array(
 			
 				"wallet" => $walletID,
-				"acccount" => $account,
+				"account" => $account,
 				"representative" => $representative
 			
 			);
 		
-			$return2 = $rbc->account_representative_set( $args );
+			$return2 = $rb_ext->account_representative_set( $args );
 			
 			if( $return2["block"] != "0000000000000000000000000000000000000000000000000000000000000000" ){ // If change representative performed correctly
 			
@@ -325,76 +353,47 @@
 	// Parameters:
 	// $string -> the string you wish your account starts with
 	
-	function raiblocks_adhoc_account( $string ){
+	function raiblocks_adhoc_account( $string, $position = "start" ){
 	
 		global $rb_ext;
 		
-		$i = 0; $a = 0;
+		$i = 0; $a = 0; $start = time();
 
 		do{
 			
 			$key_create = $rb_ext->key_create();
 			$account = $key_create["account"];
 			
-			if( strpos( $account, 'xrb_'.$string ) === 0 || strpos( $account, 'xrb_1'.$string ) === 0 || strpos( $account, 'xrb_3'.$string ) === 0 ){
+			if( $position == "start" ){
+			
+				if( strpos( $account, 'xrb_'.$string ) === 0 || strpos( $account, 'xrb_1'.$string ) === 0 || strpos( $account, 'xrb_3'.$string ) === 0 ){
+					
+					$i = 1;
+					
+				}
+			
+			}else{
 				
-				$i = 1;
-				
+				if( substr_compare( $account, $string, -strlen( $string ) ) === 0 ){
+					
+					$i = 1;
+					
+				}
+			
 			}
 			
 			$a++;
 			
 		}while( $i < 1 );
+		
+		$end = time();
+		$gap = $end - $start;
 
 		$key_create["count"] = $a;
+		$key_create["gap"] = $gap;
 			
 		return $key_create;
 	
-	}
-	
-	// Call this function to validate RaiBlocks account
-	// Requirements: PHP BLAKE2 Extension installed and enabled
-	// https://github.com/strawbrary/php-blake2
-	// Parameters:
-	// $account -> the string representation of xrb_account
-	
-	function raiblocks_account_validate($account) {
-		if (is_string($account)) {
-			$account = str_replace(' ', '', strtolower(trim($account)));
-			$account = preg_replace('/[^a-z0-9\_]/', '', $account);
-			
-			if (((strpos($account, 'xrb_1') === 0) || (strpos($account, 'xrb_3') === 0)) && (strlen($account) == 64)) {
-				$account = substr("$account", 4);
-				$char_validation = preg_match ("/^[13456789abcdefghijkmnopqrstuwxyz]+$/", $account);
-				
-				if ($char_validation === 1) {
-					function to_uint5($n) {
-						$letter_list = str_split("13456789abcdefghijkmnopqrstuwxyz");
-						return(array_search($n, $letter_list));
-					}
-					$account_array = str_split($account);
-					$uint5 = array_map(to_uint5, $account_array);
-					
-					$uint8[0] = (($uint5[0] << 7) + ($uint5[1] << 2) + ($uint5[2] >> 3)) % 256;
-					$uint8[1] = (($uint5[2] << 5) + $uint5[3]) % 256;
-					for($i = 0; $i < 7; ++$i) {
-						$uint8[5*$i+2] = ($uint5[8*$i+4] << 3) + ($uint5[8*$i+5] >> 2);
-						$uint8[5*$i+3] = (($uint5[8*$i+5] << 6) + ($uint5[8*$i+6] << 1) + ($uint5[8*$i+7] >> 4)) % 256;
-						$uint8[5*$i+4] = (($uint5[8*$i+7] << 4) + ($uint5[8*$i+8] >> 1)) % 256;
-						$uint8[5*$i+5] = (($uint5[8*$i+8] << 7) + ($uint5[8*$i+9] << 2) + ($uint5[8*$i+10] >> 3)) % 256;
-						$uint8[5*$i+6] = (($uint5[8*$i+10] << 5) + $uint5[8*$i+11]) % 256;
-					}
-					
-					$key = array_slice($uint8, 0, 32);
-					$key_string = implode(array_map("chr", $key));
-					$hash = bin2hex(implode(array_map("chr", array_reverse(array_slice($uint8, 32, 5)))));
-					$check = blake2($key_string,5);
-					if ($hash===$check) { return true; }
-					else { return false; }
-					
-				} else { return false; }
-			} else { return false; }
-		} else { return false; }
 	}
 	
 ?>

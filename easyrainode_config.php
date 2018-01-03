@@ -12,8 +12,12 @@
 	
 	// Other parameters
 	
-	DEFINE("ERN_WALLET",""); // Default wallet, type "" to use this value when CLI ask to you
+	$dwallets = array( // Default wallets, type the wallet tag to use the wallet ID when CLI ask to you
 	
+		//"tag" => "wallet ID"
+	
+	);
+		
 	// Connection to node
 	
 	$rb = new RaiBlocks(RB_HOST,RB_PORT,RB_URL); // Connect to node
