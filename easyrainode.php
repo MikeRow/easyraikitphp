@@ -153,6 +153,8 @@
 		"wcs" => array("Wallet change seed","wallet_change_seed",array("Wallet"=>"wallet","Seed"=>"seed")),
 		"wtb" => array("Wallet total balance","wallet_balance_total",array("Wallet"=>"wallet")),
 		"wab" => array("Wallet accounts balances","wallet_balances",array("Wallet"=>"wallet")),
+                "wlc" => array("Wallet locked check", "wallet_locked", array("Wallet"=>"wallet")),
+            	
 		// Account
 		"sep2" => array("Account","separator"),
 		"ab" => array("Account balance","account_balance",array("Account"=>"account")),
@@ -194,6 +196,7 @@
 		"re" => array("Representatives","representatives",null),
 		"cub" => array("Clear unchecked blocks","unchecked_clear",null),
 		"sn" => array("Stop node","stop",null),
+                "dk" => array("Deterministic Key","deterministic_key",array("Seed"=>"seed","Index"=>"index")),
 		// Extension
 		"sep4" => array("Extensions","separator"),
 		"e_bws" => array("Wallets balances","raiblocks_summary_wallets",null),
