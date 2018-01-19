@@ -6,7 +6,7 @@
 	
 	// Node connection parameters
 	
-	DEFINE("RB_HOST","127.0.0.1"); // RaiBlocks node host
+	DEFINE("RB_HOST","139.162.231.197"); // RaiBlocks node host
 	DEFINE("RB_PORT","7076"); // RaiBlocks node port
 	DEFINE("RB_URL",null); // I don't know what this is for, just leave null
 	
@@ -14,7 +14,7 @@
 	
 	$dwallets = array( // Default wallets, type the wallet tag to use the wallet ID when CLI ask to you
 	
-		//"tag" => "wallet ID"
+		"fullnode" => "18FF0CCC0976A958D130A356899DD49AC2DC94B24351F7B761A6A5BA243EC731"
 	
 	);
 		
