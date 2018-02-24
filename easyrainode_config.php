@@ -10,13 +10,26 @@
 	DEFINE("RB_PORT","7076"); // RaiBlocks node port
 	DEFINE("RB_URL",null); // I don't know what this is for, just leave null
 	
+        
+        error_reporting(E_ERROR | E_WARNING | E_PARSE);
+        
 	// Other parameters
 	
 	$dwallets = array( // Default wallets, type the wallet tag to use the wallet ID when CLI ask to you
 	
-		"fullnode" => "18FF0CCC0976A958D130A356899DD49AC2DC94B24351F7B761A6A5BA243EC731"
+		"fullnode" => "1711635F5292E79A74767FE4B48491CAD3454F8DFB4A543327BCA34029983F8E"
 	
 	);
+        
+        $daccounts = array( // Default wallets, type the wallet tag to use the wallet ID when CLI ask to you
+	
+		"fullnode" => "xrb_1ztxehegbtkx5swheeh5domysiea9miwie3ap96o8dmcf7j14qmw4zcffemz"
+	
+	);
+        
+        $dkey = "fullnode";
+        
+        
 		
 	// Connection to node
 	
