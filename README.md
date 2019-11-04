@@ -2,8 +2,8 @@
 PHP library for RaiBlocks node and operations
 
 ```diff
-# This repository is no longer supported!
-# Supported version: https://github.com/mikerow/php4nano
+# - This repository is no longer supported!
+# - Supported version: https://github.com/mikerow/php4nano
 ```
 
 **easyraialone.php** | perform RaiBlocks operations without relying on a node
