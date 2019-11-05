@@ -1,6 +1,5 @@
 ```diff
-- This repository is no longer supported!
-- Supported version: https://github.com/mikerow/php4nano
+- This repository is no longer supported! Supported version: https://github.com/mikerow/php4nano
 ```
 
 # easyraikitphp
