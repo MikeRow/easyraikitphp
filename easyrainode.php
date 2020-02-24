@@ -26,7 +26,8 @@
 	
 	// Includes
 	
-	include("easyraiblocks.php"); // Include RPC class
+
+        include("easyraiblocks.php"); // Include RPC class
 	include("easyraiext.php"); // Include extension class
 	include("easyrainode_config.php"); // Include configuration file
 	
@@ -40,7 +41,7 @@
 	
 	function rb_call_method($method,$params = null){
 		
-		global $rb; global $dwallets;
+		global $rb; global $dwallets; global $daccounts; global $dkey;
 		
 		$args = array();
 		
@@ -48,7 +49,11 @@
 		
 		if($params != null){
 		
+                         print_r($params);
+                    
 			echo "\n";
+                        
+                        
 		
 			foreach( $params as $key=>$param ){
 				
@@ -72,9 +77,29 @@
 						
 						if (count($dwallets) > 0) {
 							
-							echo "Preconfigured wallets:\n\n";
+							echo "Preconfigured wallets (use first as default):\n\n";
 							
 							foreach ($dwallets as $tag=>$wid) {
+							
+								echo $tag." => ".$wid."\n";
+				
+							}
+							
+                                                                                                                                                              
+                                                        echo "\n";
+						}
+                                                
+                                            echo $key."[". $dwallets[$dkey]   ."] : ";    
+					
+					} else
+                                        
+                                        if( $param == "account" ){
+						
+						if (count($daccounts) > 0) {
+							
+							echo "Preconfigured accounts (use first as default):\n\n";
+							
+							foreach ($daccounts as $tag=>$wid) {
 							
 								echo $tag." => ".$wid."\n";
 				
@@ -83,14 +108,27 @@
 							echo "\n";
 						
 						}
+                                                
+                                            echo $key."[". $daccounts[$dkey]   ."] : ";    
 					
-					}
+					}   else 
+                                            
+                                            echo $key.": ";        
 				
-					echo $key.": ";
+					
 					
 					$line = stream_get_line( STDIN, 1024, PHP_EOL );
 					
 					if ($param == "wallet") { 
+                                            
+                                                
+                                            // ep use first as default
+                                            if (empty($line) && !empty($dwallets[$dkey])  ) {
+                                                    
+                                                    
+                                                    $line =  $dwallets[$dkey];
+                                                    
+                                                }    else
 					
 						if (array_key_exists($line,$dwallets)) {
 					
@@ -100,7 +138,26 @@
 							
 						$lastwallet = $line;
 						
-					}
+					} else if ($param == "account") { 
+                                            
+                                                
+                                            // ep use first as default
+                                            if (empty($line) && !empty($daccounts[$dkey])  ) {
+                                                    
+                                                    
+                                                    $line =  $daccounts[$dkey];
+                                                    
+                                                }    else
+					
+						if (array_key_exists($line,$daccounts)) {
+					
+							$line = $daccounts[$line];
+						
+						}
+							
+						$lastwallet = $line;
+						
+					} 
 					
 					$args[$param] = $line;
 				
@@ -153,6 +210,8 @@
 		"wcs" => array("Wallet change seed","wallet_change_seed",array("Wallet"=>"wallet","Seed"=>"seed")),
 		"wtb" => array("Wallet total balance","wallet_balance_total",array("Wallet"=>"wallet")),
 		"wab" => array("Wallet accounts balances","wallet_balances",array("Wallet"=>"wallet")),
+                "wlc" => array("Wallet locked check", "wallet_locked", array("Wallet"=>"wallet")),
+            	
 		// Account
 		"sep2" => array("Account","separator"),
 		"ab" => array("Account balance","account_balance",array("Account"=>"account")),
@@ -194,6 +253,11 @@
 		"re" => array("Representatives","representatives",null),
 		"cub" => array("Clear unchecked blocks","unchecked_clear",null),
 		"sn" => array("Stop node","stop",null),
+                "dk" => array("Deterministic Key","deterministic_key",array("Seed"=>"seed","Index"=>"index")),
+                "rb" => array("Retrieve block", "blocks_info", array("hash" => "hash")),
+                "rec" => array("Receive block", "receive", array("wallet" => "wallet", "account" => "account" , "block" => "block")),
+            
+            
 		// Extension
 		"sep4" => array("Extensions","separator"),
 		"e_bws" => array("Wallets balances","raiblocks_summary_wallets",null),
@@ -283,14 +347,35 @@
 						
 						}
 					
-					}
+					} elseif ( $param == "account" ){
+						
+						if (count($daccounts) > 0) {
+							
+							echo "Preconfigured accounts:\n\n";
+							
+							foreach ($daccounts as $tag=>$wid) {
+							
+								echo $tag." => ".$wid."\n";
+				
+							}
+							
+							echo "\n";
+						
+						}
+                                        }        
 					
 					echo $key.": ";
 					$line2 = stream_get_line( STDIN, 1024, PHP_EOL );
 					
 					if ($param == "wallet") { 
 					
-						if (array_key_exists($line2,$dwallets)) {
+                                               
+                                                if (empty($line2) && !empty($dwallets[0])  ) {
+                                                    
+                                                    
+                                                    $line2 =  $dwallets[0];   
+                                                
+                                                } else if (array_key_exists($line2,$dwallets)) {
 					
 							$line2 = $dwallets[$line2];
 							
@@ -298,7 +383,24 @@
 							
 						$lastwallet = $line2;
 						
+					} else if ($param == "account") { 
+					
+                                               
+                                                if (empty($line2) && !empty($daccounts[0])  ) {
+                                                    
+                                                    
+                                                    $line2 =  $daccounts[0];   
+                                                
+                                                } else if (array_key_exists($line2,$daccounts)) {
+					
+							$line2 = $daccounts[$line2];
+							
+						}
+							
+						$lastwallet = $line2;
+						
 					}
+                                        
 					
 					$args[] = $line2;
 					

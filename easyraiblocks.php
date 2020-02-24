@@ -147,6 +147,8 @@
 			}
 			
 		$request = json_encode($request);
+                
+                echo ($request); 
 
 			// Build the cURL session
 			$curl = curl_init("{$this->proto}://{$this->host}:{$this->port}/{$this->url}");
@@ -191,6 +193,8 @@
 
 			// Execute the request and decode to an array
 			$this->raw_response = curl_exec( $curl );
+                        
+                        echo($this->raw_response);
 			$this->response     = json_decode( $this->raw_response, TRUE );
 
 			// If the status is not 200, something is wrong
